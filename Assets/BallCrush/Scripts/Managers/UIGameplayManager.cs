@@ -7,6 +7,7 @@ namespace BallCrush
         public static UIGameplayManager Instance { get; private set; }
 
         public UIGameplay UIGameplay;
+        public UIPause UIPause;
         public UIGameover UIGameover;
 
 
@@ -19,12 +20,14 @@ namespace BallCrush
         private void Start()
         {
             CloseAll();
+            DisplayGameplayMenu(true);
         }
 
         public void CloseAll()
-        {          
-            DisplayGameoverMenu(false);
-     
+        {
+            DisplayGameplayMenu(false);
+            DisplayPauseMenu(false);
+            DisplayGameoverMenu(false);     
         }
 
 
@@ -33,6 +36,10 @@ namespace BallCrush
             UIGameplay.DisplayCanvas(isActive);
         }
 
+        public void DisplayPauseMenu(bool isActive)
+        {
+            UIPause.DisplayCanvas(isActive);
+        }
 
         public void DisplayGameoverMenu(bool isActive)
         {

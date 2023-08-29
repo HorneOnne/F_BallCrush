@@ -37,6 +37,7 @@ namespace BallCrush
         private void Awake()
         {
             Instance = this;
+            Round = 1;
         }
 
         private void OnEnable()
@@ -59,7 +60,7 @@ namespace BallCrush
 
         private void Start()
         {
-            Round = 1;
+           
 
             for (int i = 0; i < 4; i++)
             {

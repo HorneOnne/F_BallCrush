@@ -7,83 +7,60 @@ namespace BallCrush
     public class UIGameplay : CustomCanvas
     {
         [Header("Buttons")]
-        [SerializeField] private Button _homeBtn;
-        [SerializeField] private Button _replayBtn;
+        [SerializeField] private Button _pauseBtn;
 
         [Header("Texts")]
-        [SerializeField] private TextMeshProUGUI _levelText;
-        [SerializeField] private TextMeshProUGUI _moveText;
+        [SerializeField] private TextMeshProUGUI _pauseBtnText;
+        [SerializeField] private TextMeshProUGUI _scoreText;
 
 
 
         private void OnEnable()
         {
             LanguageManager.OnLanguageChanged += LoadLanguague;
+            GameplayManager.OnStartNextRound += LoadScoreText;
         }
 
         private void OnDisable()
         {
             LanguageManager.OnLanguageChanged -= LoadLanguague;
+            GameplayManager.OnStartNextRound -= LoadScoreText;
         }
 
 
         private void Start()
         {
             LoadLanguague();
+            LoadScoreText();
 
-
-            _homeBtn.onClick.AddListener(() =>
+            _pauseBtn.onClick.AddListener(() =>
             {
                 SoundManager.Instance.PlaySound(SoundType.Button, false);
-                
-                Loader.Load(Loader.Scene.MenuScene);
+                GameplayManager.Instance.CacheGameStateWhenPause(GameplayManager.Instance.CurrentState);
+                GameplayManager.Instance.ChangeGameState(GameplayManager.GameState.PAUSE);
+
+                UIGameplayManager.Instance.CloseAll();
+                UIGameplayManager.Instance.DisplayPauseMenu(true);
             });
 
-            _replayBtn.onClick.AddListener(() =>
-            {
-                SoundManager.Instance.PlaySound(SoundType.Button, false);
-
-                Loader.Load(Loader.Scene.GameplayScene);
-            });
 
         }
 
         private void OnDestroy()
         {
-            _homeBtn.onClick.RemoveAllListeners();
-            _replayBtn.onClick.RemoveAllListeners();
+            _pauseBtn.onClick.RemoveAllListeners();
         }
 
-   
+
 
         private void LoadLanguague()
         {
-            //if (LanguageManager.Instance.CurrentLanguague == LanguageManager.Languague.Eng)
-            //{
-            //    _levelText.font = LanguageManager.Instance.NormalFont;
-            //    _moveText.font = LanguageManager.Instance.NormalFont;
+            _pauseBtnText.text = LanguageManager.Instance.GetWord(LanguageManager.Instance.CurrentLanguague, "PAUSE");
+        }
 
-            //    _levelText.fontSize = 40;
-            //    _moveText.fontSize = 40;
-            //}
-            //else if (LanguageManager.Instance.CurrentLanguague == LanguageManager.Languague.Ger)
-            //{
-            //    _levelText.font = LanguageManager.Instance.NormalFont;
-            //    _moveText.font = LanguageManager.Instance.NormalFont;
-
-            //    _levelText.fontSize = 35;
-            //    _moveText.fontSize = 35;
-            //}
-            //else
-            //{
-            //    _levelText.font = LanguageManager.Instance.RusFont;
-            //    _moveText.font = LanguageManager.Instance.RusFont;
-
-            //    _levelText.fontSize = 27;
-            //    _moveText.fontSize = 25;
-            //}
-
-            //_levelText.text = LanguageManager.Instance.GetWord(LanguageManager.Instance.CurrentLanguague, "LEVEL");
+        private void LoadScoreText()
+        {
+            _scoreText.text = $"{BlockSpawner.Instance.Round}";
         }
     }
 }

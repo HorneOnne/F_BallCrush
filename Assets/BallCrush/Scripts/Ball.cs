@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+using UnityEngine.Timeline;
 
 namespace BallCrush
 {
     public class Ball : MonoBehaviour
     {
         private Rigidbody2D _rb;
+
+        [SerializeField] private LayerMask _blockLayer;
+        [SerializeField] private LayerMask _specialBlockLayer;
+        [SerializeField] private LayerMask _wallLayer;
 
         private float _gravityStrength = 19.81f;
         private float  _maxVelocity = 18.0f;
@@ -19,7 +23,6 @@ namespace BallCrush
         }
 
 
-
         public void Shoot(Vector2 direction)
         {
             _rb.AddForce(direction * _ballForce, ForceMode2D.Impulse);
@@ -28,6 +31,9 @@ namespace BallCrush
 
         private void FixedUpdate()
         {
+            if (GameplayManager.Instance.CurrentState == GameplayManager.GameState.GAMEOVER) return;
+        
+
             ApplyCustomGravity(_gravityStrength);
             ClampVelocity(_maxVelocity);
 
@@ -70,6 +76,24 @@ namespace BallCrush
 
             transform.position = targetPosition;
             OnReachTarget?.Invoke();
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if ((_blockLayer.value & (1 << collision.gameObject.layer)) != 0)
+            {
+                SoundManager.Instance.PlaySound(SoundType.HitBlock, false);
+            }
+
+            if ((_specialBlockLayer.value & (1 << collision.gameObject.layer)) != 0)
+            {
+                SoundManager.Instance.PlaySound(SoundType.HitKey, false);
+            }
+
+            if ((_wallLayer.value & (1 << collision.gameObject.layer)) != 0)
+            {
+                //SoundManager.Instance.PlaySound(SoundType.HitWall, false);
+            }
         }
     }
 }

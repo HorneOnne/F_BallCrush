@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2608808598379914633}
   - component: {fileID: 6740109885746936645}
   - component: {fileID: 6740109885746936666}
-  m_Layer: 0
+  m_Layer: 25
   m_Name: SpeicalBlock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,6 +139,3 @@ MonoBehaviour:
   ballLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  gameoverLayer:
-    serializedVersion: 2
-    m_Bits: 134217728

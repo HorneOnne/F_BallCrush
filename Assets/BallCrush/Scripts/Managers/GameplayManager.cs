@@ -17,18 +17,19 @@ namespace BallCrush
         {
             PLAYING,
             WAITING,
-            STARTNEXTROUND,   
-            ROUNDFINISHED,   
+            STARTNEXTROUND,
+            ROUNDFINISHED,
             WIN,
             GAMEOVER,
             PAUSE,
+            UNPAUSE,
             EXIT,
         }
 
 
         [Header("Properties")]
         [SerializeField] private GameState _currentState;
-       
+        private GameState _gameStateWhenPause;
 
 
         #region Properties
@@ -40,7 +41,7 @@ namespace BallCrush
         private void Awake()
         {
             Instance = this;
-    
+
         }
 
         private void OnEnable()
@@ -67,6 +68,10 @@ namespace BallCrush
             OnStateChanged?.Invoke();
         }
 
+        public void CacheGameStateWhenPause(GameState state)
+        {
+            _gameStateWhenPause = state;
+        }
 
         private void SwitchState()
         {
@@ -78,9 +83,9 @@ namespace BallCrush
                     OnPlaying?.Invoke();
                     break;
                 case GameState.WAITING:
-                    
 
-                    break;              
+
+                    break;
                 case GameState.ROUNDFINISHED:
 
                     OnRoundFinished?.Invoke();
@@ -96,15 +101,24 @@ namespace BallCrush
                     OnWin?.Invoke();
                     break;
                 case GameState.GAMEOVER:
-                
-
+                    GameManager.Instance.SetRecord(BlockSpawner.Instance.Round);
+                    StartCoroutine(Utilities.WaitAfter(0.5f, () =>
+                    {
+                        SoundManager.Instance.PlaySound(SoundType.GameOver, false);
+                        UIGameplayManager.Instance.CloseAll();
+                        UIGameplayManager.Instance.DisplayGameoverMenu(true);
+                    }));
                     OnGameOver?.Invoke();
                     break;
                 case GameState.PAUSE:
-               
+                    Time.timeScale = 0.0f;
+                    break;
+                case GameState.UNPAUSE:
+                    Time.timeScale = 1.0f;
+                    _currentState = _gameStateWhenPause;
                     break;
                 case GameState.EXIT:
-         
+                    Time.timeScale = 1.0f;
                     break;
             }
         }

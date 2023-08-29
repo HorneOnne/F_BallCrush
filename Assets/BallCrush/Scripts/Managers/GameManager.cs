@@ -10,12 +10,12 @@ namespace BallCrush
 
         // SCORE & BEST
         private int _score;
-        private int _bestScore;
+        private int _record;
 
 
         #region Properties
         public int Score { get => _score; }
-        public int BestScore { get => _bestScore; }
+        public int Record { get => _record; }
         #endregion
 
 
@@ -38,6 +38,14 @@ namespace BallCrush
         {
             // Make the GameObject persist across scenes
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        public void SetRecord(int score)
+        {
+            if (_record < score)
+            {
+                _record = score;
+            }
         }
     }
 }

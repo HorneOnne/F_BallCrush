@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 966916458608256087}
   - component: {fileID: 966916458608256081}
   - component: {fileID: 966916458608256080}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 2526909961569932564}
   - component: {fileID: 3986526501232732076}
   - component: {fileID: 2332438980261042256}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Block_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +312,4 @@ MonoBehaviour:
   ballLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  gameoverLayer:
-    serializedVersion: 2
-    m_Bits: 134217728
   _healthText: {fileID: 966916458608256080}

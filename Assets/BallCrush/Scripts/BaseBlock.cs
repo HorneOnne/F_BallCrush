@@ -40,6 +40,7 @@ namespace BallCrush
 
         public void MoveUp()
         {
+            if (GameplayManager.Instance.CurrentState == GameplayManager.GameState.GAMEOVER) return;
             StartCoroutine(PerformMoveUp());
         }
 

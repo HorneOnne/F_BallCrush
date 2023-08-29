@@ -190,7 +190,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6499798}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 519420031}
@@ -589,7 +589,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170851543}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 519420031}
@@ -3795,7 +3795,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 9fcafa1cac2872948af27c2e8154c705, type: 3}
   - soundType: 1
     audioClips:
-    - {fileID: 8300000, guid: 46e6957ce208c2940ab304c49570417b, type: 3}
+    - {fileID: 8300000, guid: cf1f732588eee6e41a1fd43369424552, type: 3}
   - soundType: 2
     audioClips:
     - {fileID: 8300000, guid: cf1f732588eee6e41a1fd43369424552, type: 3}

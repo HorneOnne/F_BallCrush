@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 
@@ -69,6 +68,8 @@ namespace BallCrush
             {
                 Ball ball = Instantiate(_ballPrefab, _shootPoint.position, Quaternion.identity);
                 ball.Shoot(direction);
+
+                SoundManager.Instance.PlaySound(SoundType.Shoot, false);
                 yield return _waitForSeconds;
             }
 

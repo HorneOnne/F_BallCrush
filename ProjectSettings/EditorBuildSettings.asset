@@ -12,4 +12,6 @@ EditorBuildSettings:
     path: Assets/BallCrush/Scenes/GameplayScene.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 04bc257d5433823489b1a2ec3b9dbd78, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 0b6f4d9695bcd7f4484c7136ceefe9aa, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: dc61c48b2868c9842a9a1fc8583597b2, type: 2}
