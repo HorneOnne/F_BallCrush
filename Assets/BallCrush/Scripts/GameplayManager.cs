@@ -89,7 +89,6 @@ namespace BallCrush
                 case GameState.STARTNEXTROUND:
 
                     OnStartNextRound?.Invoke();
-                    ChangeGameState(GameState.PLAYING);
                     break;
                 case GameState.WIN:
 

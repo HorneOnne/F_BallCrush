@@ -8,9 +8,12 @@ namespace BallCrush
         public static InputHanlder Instance { get; private set; }
         public static event System.Action<Vector2> OnShoot;
 
+        [SerializeField] private GameObject _ballGhost;
+
+
         [field: SerializeField] public bool IsDragging { get; set; }
         private Transform _shootPointPosition;
-
+      
 
 
         private LineRenderer _lr;
@@ -26,7 +29,7 @@ namespace BallCrush
         private Vector2 dir;
         private Vector2 normal;
         private RaycastHit2D hit;
-        private float _maxLength = 4f;
+        private float _maxLength = 40f;
 
         private void Awake()
         {
@@ -35,10 +38,10 @@ namespace BallCrush
 
 
         private void Start()
-        {
+        {          
             _lr = GetComponent<LineRenderer>();
             _shootPointPosition = BallSpawner.Instance.ShootPoint;
-
+            _ballGhost.transform.position = _shootPointPosition.position;
             rays = new List<Ray2D>();
             hits = new List<RaycastHit2D>();
             normals = new List<Vector2>();
@@ -56,19 +59,36 @@ namespace BallCrush
 
         private void Update()
         {
-
-            if (Input.GetMouseButtonDown(0) && GameplayManager.Instance.CurrentState == GameplayManager.GameState.PLAYING)
-            {
+            if (GameplayManager.Instance.CurrentState != GameplayManager.GameState.PLAYING) return;
+           
+            if (Input.GetMouseButtonDown(0))
+            {            
                 IsDragging = true;
             }
-            else if (Input.GetMouseButtonUp(0) && GameplayManager.Instance.CurrentState == GameplayManager.GameState.PLAYING)
+            else if(Input.GetMouseButton(0))
             {
-                IsDragging = false;
-
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                OnShoot?.Invoke(mousePosition);
+                if (mousePosition.y < _shootPointPosition.position.y)
+                {
+                    IsDragging = true;
+                }
+                else
+                {
+                    IsDragging = false;
+                }
 
-                GameplayManager.Instance.ChangeGameState(GameplayManager.GameState.WAITING);
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                if(IsDragging)
+                {
+                    IsDragging = false;
+                    _ballGhost.SetActive(false);
+
+                    Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    OnShoot?.Invoke(mousePosition);
+                    GameplayManager.Instance.ChangeGameState(GameplayManager.GameState.WAITING);
+                }              
             }
         }
 
@@ -80,7 +100,6 @@ namespace BallCrush
             if (IsDragging)
             {
                 Aiming(); // aiming
-
                 float totalDistance = 0f;
 
                 for (int i = 1; i < _bounces + 2; i++)
@@ -151,6 +170,11 @@ namespace BallCrush
             dirs[0] = Input.mousePosition - Camera.main.WorldToScreenPoint(_shootPointPosition.position);
             float angle = Mathf.Atan2(dirs[0].y, dirs[0].x) * Mathf.Rad2Deg;
             _shootPointPosition.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
+        public void ShowGhost()
+        {
+            _ballGhost.SetActive(true);
         }
     }
 

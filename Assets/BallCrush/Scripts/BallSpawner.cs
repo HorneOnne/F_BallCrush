@@ -11,7 +11,7 @@ namespace BallCrush
         [SerializeField] private Ball _ballPrefab;
         [SerializeField] private Transform _shootPoint;
 
-        [SerializeField] private GameObject _ballGhost;
+
         private WaitForSeconds _waitForSeconds;
 
 
@@ -24,29 +24,35 @@ namespace BallCrush
         private void Awake()
         {
             Instance = this;
-
-            _ballGhost.transform.position = _shootPoint.position;
         }
 
 
         private void OnEnable()
         {
             InputHanlder.OnShoot += ShootBall;
+            GameplayManager.OnStartNextRound += SpawnBallGhost;
         }
 
         private void OnDisable()
         {
             InputHanlder.OnShoot -= ShootBall;
+
+            GameplayManager.OnStartNextRound -= SpawnBallGhost;
         }
 
         private void Start()
         {
-            CurrentBallCount = 3;
+            CurrentBallCount = 1;
             _waitForSeconds = new WaitForSeconds(0.1f);
         }
 
 
  
+        public void AddBall()
+        {
+            CurrentBallCount++;
+        }
+
 
         private void ShootBall(Vector2 mousePosition)
         {      
@@ -70,17 +76,45 @@ namespace BallCrush
         }
 
 
-
-   
         public void ReturnBall()
         {
             BallReturnedCount++;
 
             if(BallReturnedCount == BallShootedCount)
             {
-                Debug.Log("AA");
                 GameplayManager.Instance.ChangeGameState(GameplayManager.GameState.ROUNDFINISHED);
             }
+        }
+
+        private void SpawnBallGhost()
+        {
+            StartCoroutine(PerformSpawnBallGhost(ShootPoint.position, InputHanlder.Instance.ShowGhost, () =>
+            {                
+                GameplayManager.Instance.ChangeGameState(GameplayManager.GameState.PLAYING);
+            }));
+        }
+
+        public IEnumerator PerformSpawnBallGhost(Vector2 targetPosition, System.Action OnFirst, System.Action OnFinished)
+        {
+            for (int i = 0; i < CurrentBallCount; i++)
+            {
+                Vector2 position = (Vector2)ShootPoint.position + new Vector2(Random.Range(-2f, 2f), 2f);
+                Ball ball = Instantiate(_ballPrefab, position, Quaternion.identity);
+                ball.GetComponent<Rigidbody2D>().isKinematic = true;
+                ball.MoveToTarget(targetPosition, () =>
+                {
+                    Destroy(ball.gameObject);
+                });
+
+                if(i == 0)
+                {
+                    OnFirst?.Invoke();
+                }
+
+                yield return _waitForSeconds;
+            }
+
+            OnFinished?.Invoke();
         }
     }
 }

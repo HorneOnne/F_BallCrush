@@ -9,10 +9,14 @@ namespace BallCrush
     {
         public static BlockSpawner Instance { get; private set; }
 
-        [SerializeField] private List<Block> _blocks;
+        [Header("Prefabs")]
+        [SerializeField] private List<BaseBlock> _blocks;
+        [SerializeField] private SpecialBlock _specialBlock;
+
+        [Header("Others")]
         [SerializeField] private Transform _centerPointTransform;
-        private float _distanceEachStage = 1.45f;
-        private float _gridSize = 1.45f;
+        private float _distanceEachStage = 1.6f;
+        private float _gridSize = 1.6f;
         private bool _isEvenSpawn = false;
 
 
@@ -20,7 +24,15 @@ namespace BallCrush
         [Range(0f, 1f)]
         [SerializeField] private float _fillBlockRate;
         [Range(0f, 1f)]
-        [SerializeField] private float _additionBallRate;
+        [SerializeField] private float _specialBlockRate;
+        [Range(0f, 1f)]
+        [SerializeField] private float _strongBlockRate;
+
+
+
+        #region Properties
+        public int Round { get; private set; }
+        #endregion
 
         private void Awake()
         {
@@ -30,22 +42,31 @@ namespace BallCrush
         private void OnEnable()
         {
             GameplayManager.OnRoundFinished += GenerateNextRow;
+            GameplayManager.OnRoundFinished += ()=>
+            {
+                Round++;
+            };
         }
 
         private void OnDisable()
         {
             GameplayManager.OnRoundFinished -= GenerateNextRow;
+            GameplayManager.OnRoundFinished -= () =>
+            {
+                Round++;
+            };
         }
 
         private void Start()
         {
+            Round = 1;
+
             for (int i = 0; i < 4; i++)
             {
                 Vector2 position = new Vector2(_centerPointTransform.position.x, _centerPointTransform.position.y + _distanceEachStage * i);
                 int spawnCount = _isEvenSpawn == true ? 3 : 4;
                 GenerateRowBlocks(position, spawnCount);
                 _isEvenSpawn = !_isEvenSpawn;
-
             }
 
         }
@@ -65,12 +86,33 @@ namespace BallCrush
 
             for (int i = 0; i < points.Count; i++)
             {
-                Vector3 eulerAngle = GetRandomBlockRotation(-25f, 25f);
-                Block block = Instantiate(_blocks[Random.Range(0, _blocks.Count)], points[i], Quaternion.Euler(eulerAngle));
-
-                if (moveUp)
+                if(Random.Range(0f, 1f) < _fillBlockRate)
                 {
-                    block.MoveUp();
+                    if (Random.Range(0f, 1f) < _specialBlockRate)
+                    {
+                        BaseBlock block = Instantiate(_specialBlock, points[i], Quaternion.identity);
+                        if (moveUp)
+                        {
+                            block.MoveUp();
+                        }
+                    }
+                    else
+                    {
+                        Vector3 eulerAngle = GetRandomBlockRotation(-25f, 25f);
+                        BaseBlock block = Instantiate(_blocks[Random.Range(0, _blocks.Count)], points[i], Quaternion.Euler(eulerAngle));
+
+                        if (moveUp)
+                        {
+                            block.MoveUp();
+                        }
+                        if (Random.Range(0f, 1f) < _strongBlockRate)
+                            block.SetHealth(Round + Random.Range(5,15));
+                        else
+                            block.SetHealth(Round);
+
+
+                    }
+                    
                 }
             }
         }

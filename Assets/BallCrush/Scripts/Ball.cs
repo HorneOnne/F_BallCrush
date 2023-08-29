@@ -1,4 +1,4 @@
-﻿using UnityEditor.Tilemaps;
+﻿using System.Collections;
 using UnityEngine;
 
 
@@ -11,7 +11,7 @@ namespace BallCrush
         private float _gravityStrength = 19.81f;
         private float  _maxVelocity = 18.0f;
         private float _ballForce = 20.0f;
-        private float _minY = -7.5f;
+        private float _minY = -8.0f;
 
         private void Awake()
         {
@@ -52,6 +52,24 @@ namespace BallCrush
             {
                 _rb.velocity = _rb.velocity.normalized * maxVelocity;
             }
+        }
+
+
+        public void MoveToTarget(Vector2 targetPosition, System.Action OnReachTarget)
+        {
+            StartCoroutine(PerformMoveUp(targetPosition, OnReachTarget));
+        }
+        private IEnumerator PerformMoveUp(Vector2 targetPosition, System.Action OnReachTarget)
+        {
+            float distanceThreshold = 0.001f;
+            while (Vector3.Distance(transform.position, targetPosition) > distanceThreshold)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, 10f * Time.deltaTime);
+                yield return null;
+            }
+
+            transform.position = targetPosition;
+            OnReachTarget?.Invoke();
         }
     }
 }
