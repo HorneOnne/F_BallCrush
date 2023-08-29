@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/BallCrush/Scenes/MenuScene.unity
+    guid: f34dccba9cbc26e4f9d1558234211652
+  - enabled: 1
     path: Assets/BallCrush/Scenes/GameplayScene.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
