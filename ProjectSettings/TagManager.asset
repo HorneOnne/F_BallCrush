@@ -35,9 +35,18 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Ball
+  - Block
   m_SortingLayers:
+  - name: BackgroundUI
+    uniqueID: 3722264797
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Object
+    uniqueID: 1826015457
+    locked: 0
+  - name: UI
+    uniqueID: 2797901867
     locked: 0

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: fe481bca0405e334099c0dc1f96581fc
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Karantina
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1aa4da547e68fc247889a0a676c830b2, type: 3}
+  - {fileID: 12800000, guid: 0838e2a002966a440ae2c4180558bc54, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
